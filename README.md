@@ -86,9 +86,3 @@ Streamlit Webcam App  ───INSERT───▶  detections table  ◀──�
 
 ---
 
-## 💡 **Contribute & Connect**
-
-- 💻 **Fork & Customize**: Improve and adapt this project for your needs.
-- 📩 **Feedback & Suggestions**: Always welcome!
-
-🚀 **Made with ❤️ by ApyCoder**
