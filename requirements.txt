@@ -1,34 +1,11 @@
 # Cloud requirements — FastAPI dashboard only (no torch/cv2/streamlit)
-# These are installed on Render during the build step.
+# Loose pins so pip resolves compatible wheels for the pinned Python version.
 
-supabase==2.15.2
-gotrue==2.12.0
-httpx==0.27.2
-httpcore==1.0.7
-h2==4.1.0
-hpack==4.0.0
-hyperframe==6.0.1
-certifi==2025.1.31
-idna==3.10
-charset-normalizer==3.4.1
-urllib3==2.3.0
-
-fastapi==0.115.8
-uvicorn==0.34.0
-starlette==0.45.3
-jinja2==3.1.5
-MarkupSafe==3.0.2
-pydantic==2.10.6
-pydantic_core==2.27.2
-anyio==4.8.0
-sniffio==1.3.1
-h11==0.14.0
-click==8.1.8
-pandas==2.2.3
-numpy==2.1.1
-python-dateutil==2.9.0.post0
-pytz==2025.1
-tzdata==2025.1
-six==1.17.0
-annotated-types==0.7.0
-typing_extensions==4.12.2
+fastapi>=0.115.0
+uvicorn>=0.34.0
+starlette>=0.45.0
+jinja2>=3.1.0
+pydantic>=2.10.0
+supabase>=2.10.0
+pandas>=2.2.0
+python-multipart>=0.0.9
