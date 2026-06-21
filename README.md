@@ -1,96 +1,88 @@
+# 🚀 **Real-Time Restricted Area Monitoring System with YOLO**
+
+This project integrates **FastAPI**, **Streamlit**, and **Supabase (PostgreSQL)** to create a **real-time monitoring dashboard** for object detection logs. 
+
+- **Streamlit** (Local) runs your webcam, detects objects using YOLO, and writes data directly to a cloud database.
+- **Supabase** (Cloud Database) stores detection logs in real-time.
+- **FastAPI + Render** (Cloud Dashboard) reads the live data and serves an interactive web dashboard using WebSockets.
 
 ---
 
-# 🚀 **Real-Time Restricted Area Monitoring System with Yolo**
+## 🌐 **Live Websites & URLs**
 
-This project integrates **FastAPI** and **Streamlit** to create a **real-time monitoring dashboard** for object detection logs stored in a CSV file.
+The dashboard is fully deployed to the cloud and is accessible here:
 
-- **FastAPI** handles real-time WebSocket communication.
-- **Streamlit** provides an interactive and dynamic UI for live visualization.
-
----
-
-## 🎯 **Key Features**
-
-- ✅ **Real-time Object Detection** with Streamlit for continuous video streaming.
-- ✅ **Live Data Dashboard** powered by FastAPI.
-- ✅ **Automatic Data Refresh** every second.
-- ✅ **Interactive Analytics & Insights** with Pandas.
-- ✅ **CSV-based Logging** for easy data handling and monitoring.
+- 📊 **Main Dashboard:** [https://real-time-restricted-area-monitoring.onrender.com/](https://real-time-restricted-area-monitoring.onrender.com/)
+- 📋 **Data Table:** [https://real-time-restricted-area-monitoring.onrender.com/data](https://real-time-restricted-area-monitoring.onrender.com/data)
+- ❤️ **API Health Check:** [https://real-time-restricted-area-monitoring.onrender.com/health](https://real-time-restricted-area-monitoring.onrender.com/health)
 
 ---
 
-## 🛠️ **Installation & Setup**
+## 🛠️ **Installation & Setup (Local WebCam App)**
 
-Follow these steps to set up the project:
+To run the camera detection on your local machine and stream data to the live dashboard, follow these steps:
 
 ### 1️⃣ **Install Dependencies**
 
-Ensure you have Python installed, then run the following command to install required dependencies:
+Ensure you have Python 3.11+ installed. Install the local required dependencies:
 
-```bash
-pip install -r requirements.txt
+```powershell
+pip install -r requirements-local.txt
 ```
 
-### 2️⃣ **Start FastAPI Backend**
+*(Note: The cloud dashboard uses `requirements.txt` which is optimized for deployment).*
 
-Run the FastAPI server to serve data via WebSockets:
+### 2️⃣ **Configure Environment Variables**
 
-```bash
-uvicorn fastapi_run:app --reload
+Create a `.env` file in the root directory (you can copy `.env.example`). You need your Supabase credentials:
+
+```ini
+SUPABASE_URL=https://aingwekdutgirzjdzljg.supabase.co
+SUPABASE_KEY=your-supabase-anon-key
 ```
 
-- 🔗 **Server URL:** [http://127.0.0.1:8000](http://127.0.0.1:8000)
+### 3️⃣ **Launch the Streamlit Webcam App**
 
-### 3️⃣ **Launch Streamlit Dashboard**
+Start the Streamlit frontend. Make sure your environment variables are loaded:
 
-Start the Streamlit frontend:
-
-```bash
-streamlit run streamlit_run.py
+```powershell
+# Windows PowerShell
+$env:SUPABASE_URL="https://aingwekdutgirzjdzljg.supabase.co"
+$env:SUPABASE_KEY="your-supabase-anon-key"
+python -m streamlit run streamlit_run.py
 ```
 
-- 📊 **Your real-time  Video Streaming dashboard will open in your web browser!**
+- Your webcam feed will open at **[http://localhost:8501](http://localhost:8501)**.
+- Any violations detected will instantly be pushed to Supabase, and your live cloud dashboard will update automatically!
 
 ---
 
-## 🔍 **How It Works**
-### 🚀 **FastAPI WebSocket Backend**
-![Real Time Res (1)](https://github.com/user-attachments/assets/bf2c4ac3-7e4c-4f84-abb0-06514eaefafe)
-- **Data Handling**: Reads live data from `detection_log.csv`.
-- **Real-Time Data**: Uses WebSockets to push real-time detection logs to connected clients without requiring page refreshes.
-- **Live Data Monitoring**: 
-  - Displays updates on object detection and violations.
-  - Real-time updates of detection and violation counts on the dashboard.
+## 🔍 **How to Check Logs & Data**
 
-#### **Summary Cards**
-- **Total Detections**: Displays the total number of detected objects in real time.
-- **Total Violations 🚨**: Displays the number of violations detected (e.g., unauthorized access).
-- **Most Frequent Class**: Shows the most frequently detected object class.
+There are three ways to view the detection logs:
 
-#### **Charts**
-- **Object with Confidence**: Bar chart visualizing the confidence levels of detected objects.
-- **Violation Counts by Time of Day**: Pie chart illustrating violation distribution by time.
+1. **Live Cloud Dashboard (Recommended):**
+   Visit the [Data Page](https://real-time-restricted-area-monitoring.onrender.com/data) to view the real-time updating table of all detections.
+   
+2. **Supabase Database:**
+   Log into your Supabase project (`https://aingwekdutgirzjdzljg.supabase.co`) and view the `detections` table using the Table Editor.
 
-#### **Data Table**
-- Displays a table with recent detection data: timestamp, object class, confidence percentage, and violation status.
-- Shows a message like "Waiting for live data..." when no data is available.
-
----
-### 📊 **Streamlit Frontend**
-<img width="954" alt="Capture1234" src="https://github.com/user-attachments/assets/2cdd8f8a-906d-46f7-9954-db8f203430d6" />
-- **Real-Time Intrusion Detection**: Detects objects using YOLO and triggers alerts when specific objects enter a restricted area.
-- **Restricted Area**: Defines a central restricted area to monitor violations.
-- **Sound Alerts**: Triggers sound alerts when an object enters the restricted area.
-- **Detection Logging**: Logs detection data to a CSV file when a restricted area violation occurs.
+3. **Local Fallback (CSV):**
+   If Streamlit loses connection to the internet or Supabase is not configured, it will fall back to saving logs locally in `data/detection_log.csv`.
 
 ---
 
-## 🎬 **Live Demo & Usage**
+## 🏗️ **Architecture Details**
 
-Once both servers are running, open the **Streamlit dashboard** in your browser to start monitoring real-time detections and insights! 🚀
+```text
+[Your PC / Localhost]                 [Supabase Cloud]                 [Render Cloud]
+Streamlit Webcam App  ───INSERT───▶  detections table  ◀───SELECT───  FastAPI Dashboard
+ (Runs YOLO model)                    (PostgreSQL DB)                  (Public Website)
+```
 
-- 📡 **Monitor, analyze, and visualize data live!**
+- **Data Handling**: Uses Supabase Python clients for ultra-low latency reads/writes.
+- **Real-Time Data**: FastAPI uses WebSockets to push new rows from Supabase to connected web clients every second.
+- **Alerts**: Triggers local `alert.mp3` sounds when objects enter the defined restricted zone.
 
 ---
 
@@ -100,6 +92,3 @@ Once both servers are running, open the **Streamlit dashboard** in your browser 
 - 📩 **Feedback & Suggestions**: Always welcome!
 
 🚀 **Made with ❤️ by ApyCoder**
-
----
-
