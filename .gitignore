@@ -1,0 +1,27 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+
+# Environment
+.env
+venv/
+.venv/
+env/
+
+# Model files (large — add to Git LFS or keep local only)
+model/*.pt
+
+# Local data / database (not committed; created at runtime)
+data/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

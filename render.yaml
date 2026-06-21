@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: restricted-area-monitoring
+    env: python
+    region: singapore          # closest free-tier region to India
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn fastapi_run:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+
+    # Supabase credentials — set these in Render's Environment tab
+    # (do NOT commit real values here)
+    envVars:
+      - key: SUPABASE_URL
+        sync: false            # Render will prompt you to fill this in
+      - key: SUPABASE_KEY
+        sync: false
