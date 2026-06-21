@@ -84,12 +84,12 @@ async def post_detection(det: Detection):
 
 @app.get("/", response_class=HTMLResponse)
 async def get_dashboard(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse(request, "index.html")
 
 
 @app.get("/data", response_class=HTMLResponse)
 async def get_data_page(request: Request):
-    return templates.TemplateResponse("data.html", {"request": request})
+    return templates.TemplateResponse(request, "data.html")
 
 
 # ── WebSocket: live dashboard ─────────────────────────────────────────────────
